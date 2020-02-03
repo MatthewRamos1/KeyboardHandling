@@ -22,6 +22,7 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         registerForKeyboardNotifications()
+        pulsateLogo()
         usernameTextField.delegate = self
         passwordTextField.delegate = self
     }
@@ -58,7 +59,6 @@ class ViewController: UIViewController {
     @objc
     private func keyboardWillHide(_ notification: NSNotification) {
         print("keyboardWillHide")
-        print(notification.userInfo)
     }
     
     private func moveKeyboardUp(_ height: CGFloat) {
@@ -66,11 +66,20 @@ class ViewController: UIViewController {
         keyboardIsVisable = true
         originalYconstraint = pursuitLogoCenterYConstraint
         pursuitLogoCenterYConstraint.constant -= (height * 0.80)
+        UIView.animate(withDuration: 0.5) {
+            self.view.layoutIfNeeded()
+        }
     }
     
     private func resetUI() {
         keyboardIsVisable = false
         pursuitLogoCenterYConstraint.constant -= originalYconstraint.constant
+    }
+    
+    private func pulsateLogo() {
+        UIView.animate(withDuration: 1, delay: 0.0, options: [.repeat, .autoreverse], animations: {
+            self.pursuitLogo.transform = CGAffineTransform(scaleX: 1.2, y: 1.2)
+        }, completion: nil)
     }
 
 }
